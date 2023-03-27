@@ -1,0 +1,76 @@
+﻿@model IEnumerable<TestTaskSupportDashboard.Models.Message>
+@{
+    Layout = null;
+}
+<!doctype html>
+<html>
+<head>
+    <title>Тикеты</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .message-list {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 70%;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            display: flex;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+        }
+
+            .message > * {
+                margin-right: 10px;
+            }
+    </style>
+</head>
+<body>
+    <p>Это страница для конкретного тикета @ViewBag.ChatId. <a href="~/tickets/">Все тикеты</a></p>
+    <div class="message-list">
+        @foreach (var Message in Model)
+        {
+            <div class="message">
+                <span> @Message.Date</span>
+                @if (Message.Type == TestTaskSupportDashboard.Enums.SenderType.SupportOperator)
+                {
+                    <span>Оператор:</span>
+                }
+                else
+                {
+                    <span> Игрок: </span>
+                }
+                <span> @Message.Text</span>
+                @if (Message.IsRead == true)
+                {
+                    <span>Прочитано</span>
+                }
+                else
+                {
+                    <span>Не прочитано</span>
+                }
+            </div>
+        }
+    </div>
+    @{
+        if (User.IsInRole("supportoperator"))
+        {
+            <form method="post" style="width: 70%;">
+                <input type="hidden" value="@ViewBag.ChatId" name="ChatId" />
+                <input type="hidden" value="@ViewBag.IsRead" name="IsRead" />
+                <input type="hidden" value="@ViewBag.Date" name="Date" />
+                <input type="hidden" value="@ViewBag.Type" name="Type" />
+                <textarea name="Text" cols="70" rows="3" style="width: 100%;"></textarea>
+                <p><input type="submit" value="Отправить" /></p>
+            </form>
+        }
+    }
+</body>
+</html>

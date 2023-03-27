@@ -1,0 +1,27 @@
+﻿@model IEnumerable<string>
+@{
+    Layout = null;
+}
+<!doctype html>
+<html>
+<head>
+    <title>Тикеты</title>
+</head>
+<body>
+    <a asp-action="Logout" asp-controller="Login">Выйти</a>
+    @{
+        if (User.IsInRole("guest"))
+        {
+            <p style="text-align: center;">Чтобы видеть список тикетов, нужно иметь права Наблюдатель или Оператор</p>
+        }
+        else
+        {
+            <p style="text-align: center;">Тикеты от игроков:</p>
+            @foreach (var ChatId in Model)
+            {
+                <p style="text-align: center;"><a href="~/tickets/@ChatId">Тикет от @ChatId</a></p>
+            }
+        }
+    }
+</body>
+</html>
